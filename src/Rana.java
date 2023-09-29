@@ -7,15 +7,16 @@ public class Rana {
 
 	public static void main(String[] args) {
 		
-		int veces = 3;
+		int veces = 6;
 		
 		String data = "ppprppppr";
 		
 		byte [] normalizada = normalizar(data);
 		//int [] a = {0};
 		
-		System.out.println("a");
-		mostarLista(normalizada);
+		System.out.println("a" + mostarLista(normalizada));
+		
+		
 		
 		System.out.println("result");
 		calculoRecursivo(normalizada,veces);
@@ -79,8 +80,10 @@ public class Rana {
 					m[i][d] = 0;
 				} else if (i == 1 && d == 3) {
 					m[i][d] = 0;
-				} else if ( data[i-1] == 0 ) {
+				} else if (data[i-1] == 0 ) {
 					m[i][d] = m[i-1][2];
+				} else if (d== 3 && data[i-1] == 0 ) {
+					m[i][d] = m[i][3];
 				} else if (d == 3 && data[i-1] % 2 == 1 && data[i-2] == 0) {
 					m[i][d] = (m[i-1][3] + 1)% 998244353;
 				} else if (d == 3 && data[i-1] == 2) {
@@ -113,9 +116,7 @@ public class Rana {
 				d = 2;
 				i--;
 				//m[i][d] = m[i-1][2];
-			} else if (data[i-1] == 0) {
-				
-			} else if (d == 3 && data[i-1] % 2 == 1 && data[i-2] == 0) {
+			}  else if (d == 3 && data[i-1] % 2 == 1 && data[i-2] == 0) {
 				soluciones[j] = data.clone();
 				soluciones[j][i-2] = 3;
 				soluciones[j][i-1] = 0;
@@ -192,6 +193,7 @@ public class Rana {
 				for ( byte[][] soluciones : evalA.values()) {
 					for (int i = 0; i < soluciones.length; i++) {
 						nombre = mostarLista(soluciones[i]);
+						System.out.println("llave " + nombre);
 						if (!evalB.containsKey(nombre)) {
 							evalB.put(nombre,calculoPosibilidades(soluciones[i]));	
 						}
@@ -203,6 +205,7 @@ public class Rana {
 				for ( byte[][] soluciones : evalB.values()) {
 					for (int i = 0; i < soluciones.length; i++) {
 						nombre = mostarLista(soluciones[i]);
+						System.out.println("llave " + nombre);
 						if (!evalA.containsKey(nombre)) {
 							evalA.put(nombre,calculoPosibilidades(soluciones[i]));	
 						}
