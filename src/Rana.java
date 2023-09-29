@@ -3,17 +3,20 @@ import java.util.HashSet;
 
 public class Rana {
 	static private HashSet<String> ultimas = new HashSet<String>();
-
+	static private int[][]  m;
+	static private byte[][] soluciones;
+	static private String nombre;
+	
+	
 	public static void main(String[] args) {
-		
-		int veces = 6;
+		int veces = 1;
 		
 		String data = "ppprppppr";
 		
 		byte [] normalizada = normalizar(data);
 		//int [] a = {0};
 		
-		System.out.println("a" + mostarLista(normalizada));
+		System.out.println("Entrada " + mostarLista(normalizada));
 		
 		
 		
@@ -36,20 +39,13 @@ public class Rana {
 		
 	}
 	
-	public static String mostarLista(int [] data) {
-		String lista = "";
-		for (int i = 0; i < data.length; i++) {
-			lista += "" + data[i];
-		}
-		return lista;
-
-	}
 	public static String mostarLista(byte [] data) {
-		String lista = "";
-		for (int i = 0; i < data.length; i++) {
-			lista += "" + data[i];
-		}
-		return lista;
+		nombre = "";
+	    for (byte c : data) {
+	        	nombre += c;
+	    }
+
+	    return nombre;
 		
 	}
 	
@@ -71,11 +67,11 @@ public class Rana {
 	
 	public static byte[][] calculoPosibilidades(byte[] data) {
 		
-		int[][] m = new int [data.length + 1][4];
+		m = new int [data.length + 1][4];
 		
 		for (int i = 0; i < m.length ; i++) {
 			for (byte d = 3; d > 1; d--) {
-				if (i == 0 || d == 0) {
+				if (i == 0) {
 					m[i][d] = 0;
 				} else if (i == 1 && d == 3) {
 					m[i][d] = 0;
@@ -98,15 +94,15 @@ public class Rana {
 				}
 			}
 		}
-		mostarMatriz(m);
+		//mostarMatriz(m);
 		
 		int maximos = m[m.length - 1][3];
 		byte d = 3;
-		byte[][] soluciones = new byte[maximos][data.length];
+		soluciones = new byte[maximos][data.length];
 		int j = 0;
 		int i = data.length;
 		while (i > 0) {
-			if (i == 0 || d == 0) {
+			if (i == 0) {
 				//m[i][d] = 0;
 			} else if (i == 1 && d == 3) {
 				i--;
@@ -184,32 +180,38 @@ public class Rana {
 		} else {
 			evalB.put(mostarLista(data),calculoPosibilidades(data));	
 		}
-		int n = m;
-		while (m > 0) {
+		int n = m - 1;
+		while (n > 0) {
 			if (m%2 == 1) {
 				evalB = new HashMap<String, byte[][]> ();
-				System.out.println("Tamano de A " +evalA.size());
+				//System.out.println("Tamano de A " +evalA.size());
 				for ( byte[][] soluciones : evalA.values()) {
 					for (int i = 0; i < soluciones.length; i++) {
 						nombre = mostarLista(soluciones[i]);
-						System.out.println("llave " + nombre);
+						//System.out.println("llave " + nombre);
 						if (!evalB.containsKey(nombre)) {
 							evalB.put(nombre,calculoPosibilidades(soluciones[i]));	
 						}
 					}
 				}
+				
+				evalA = new HashMap<String, byte[][]> ();
+				
 			}else{
 				evalA = new HashMap<String, byte[][]> ();
-				System.out.println("Tamano de B " + evalB.size());
+				//System.out.println("Tamano de B " + evalB.size());
 				for ( byte[][] soluciones : evalB.values()) {
 					for (int i = 0; i < soluciones.length; i++) {
 						nombre = mostarLista(soluciones[i]);
-						System.out.println("llave " + nombre);
+						//System.out.println("llave " + nombre);
 						if (!evalA.containsKey(nombre)) {
 							evalA.put(nombre,calculoPosibilidades(soluciones[i]));	
 						}
 					}
 				}
+				
+				evalB = new HashMap<String, byte[][]> ();
+
 				
 			}
 			
@@ -217,7 +219,7 @@ public class Rana {
 			m--;
 		}
 		
-		if (n%2 == 1) {
+		if (m%2 == 1) {
 			for ( byte[][] soluciones : evalA.values()) {
 				for (int i = 0; i < soluciones.length; i++) {
 					nombre = mostarLista(soluciones[i]);
